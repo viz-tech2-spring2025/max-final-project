@@ -18,6 +18,8 @@ const ChoroplethMap = ({ dataByYear }) => {
 
   // Conversion function: Convert a 5-digit FIPS code (as a string) to a 6-digit key by repeating the second character.
   // For example: "01001" becomes "011001", "04001" becomes "044001".
+  // TODO: explore better strategies for this, probably need to just consolidate this in python. There has to be a better way to do this lol
+  // maybe explore other sources that match the data?? would be much easier.
   const convertFips = (fips) => {
     if (typeof fips !== "string") fips = String(fips);
     if (fips.length === 5) {
@@ -62,6 +64,7 @@ const ChoroplethMap = ({ dataByYear }) => {
     svg.selectAll("*").remove();
 
     // Load US counties TopoJSON from the CDN.
+    // NOTE: this is where the different is in the FIPS codes. Another potential solution could be to explore other sources where the FIPS codes match?
     d3.json("https://cdn.jsdelivr.net/npm/us-atlas@3/counties-10m.json")
       .then(us => {
         // Convert TopoJSON to GeoJSON for counties.
@@ -84,6 +87,7 @@ const ChoroplethMap = ({ dataByYear }) => {
           .attr("d", path)
           .attr("fill", d => {
             // converts d.id (5-digit FIPS) to your expected 6-digit key.
+            // TODO: explore better strategies for this, probably need to just adjust this in python. There has to be a better way to do this lol.
             const convertedFips = convertFips(d.id);
             const value = currentData[convertedFips];
 
