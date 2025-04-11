@@ -1,4 +1,3 @@
-// App.jsx
 import React from 'react';
 import LandingSection from './components/LandingSection';
 import ChoroplethMap from './components/ChoroplethMap';

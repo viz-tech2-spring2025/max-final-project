@@ -1,4 +1,3 @@
-// src/components/ChoroplethMap.jsx
 import React, { useRef, useEffect, useState } from 'react';
 import * as d3 from 'd3';
 import { feature } from 'topojson-client';
