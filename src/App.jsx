@@ -1,10 +1,11 @@
 import React from 'react';
 import LandingSection from './components/LandingSection';
 import ChoroplethMap from './components/ChoroplethMap';
+import SkinCancerInfo from './components/SkinCancerInfo';
+import TypesScroll from './components/TypesScroll';
 import './App.css';
 import aggregatedData from './data/aggregatedData.json';
-
-console.log("Aggregated Data in App:", aggregatedData);
+import OzoneGlobe from './components/OzoneGlobe';
 
 function App() {
   return (
@@ -13,6 +14,15 @@ function App() {
       <div className="app-container">
         <ChoroplethMap dataByYear={aggregatedData} />
       </div>
+      <div className="app-container">
+        <SkinCancerInfo />
+      </div>
+      <div className="app-container">
+        <TypesScroll />
+      </div>
+     {/* <div className="app-container">
+        <OzoneGlobe />
+      </div> */}
     </div>
   );
 }

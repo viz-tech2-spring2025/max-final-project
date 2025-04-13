@@ -1,0 +1,46 @@
+
+.scrolly-wrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    width: 100%;
+    margin: 4rem auto;
+    padding: 2rem;
+    box-sizing: border-box;
+  }
+  
+  .scrolly-text {
+    flex: 1;
+    padding-right: 2rem;
+  }
+
+  .scrolly-step {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.3;
+    transition: opacity 0.3s;
+    font-size: 1.5rem;
+    padding: 2rem;
+  }
+
+  .scrolly-step.active {
+    opacity: 1;
+  }
+ 
+  .scrolly-image {
+    flex: 1;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .scrolly-image img {
+    max-width: 90%;
+    max-height: 90%;
+  }
+  

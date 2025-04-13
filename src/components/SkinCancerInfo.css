@@ -1,0 +1,47 @@
+.info-section {
+    width: 100vw;
+    margin-left: calc(-50vw + 50%);
+    background: #0B1A2E; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 4rem 0;
+  }
+  
+  .content-wrapper {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  .info-svg {
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 10rem;
+    margin-top: 5rem;
+  }
+  
+  .info-title {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: #333;
+  }
+  
+  .info-subtitle {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: #555;
+    margin: 0 auto;
+  }
+  
+  .landing-title {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  .landing-subtitle {
+    font-size: 1.1rem;
+    line-height: 1.5;
+    margin-bottom: 2rem;
+  }

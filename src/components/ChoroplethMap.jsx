@@ -1,17 +1,15 @@
-
 import React, { useRef, useEffect, useState } from 'react';
 import * as d3 from 'd3';
 import { feature } from 'topojson-client';
 
 const ChoroplethMap = ({ dataByYear }) => {
-  // catch when data doesn't load
   if (!dataByYear) {
-    throw new Error("dataByYear prop is undefined or null. Please verify that aggregatedData.json is imported correctly.");
+    throw new Error("dataByYear prop is undefined or null. Please verify that aggregatedData.json is correctly imported and passed.");
   }
 
-  // extract the available years from the aggregated data keys and sort them.
+  // extract available years (assumed to be continuous, e.g., 1991 to 2012) and sort them.
   const availableYears = Object.keys(dataByYear).sort();
-  // use first year as default for flexibility
+  // use the first available year as the default.
   const [year, setYear] = useState(availableYears[0]);
   const svgRef = useRef();
   const tooltipRef = useRef(null);
@@ -53,14 +51,12 @@ const ChoroplethMap = ({ dataByYear }) => {
     const width = 960;
     const height = 600;
     svg.attr("width", width).attr("height", height);
-
     // Define projection and path generator.
     const projection = d3.geoAlbersUsa()
       .translate([width / 2, height / 2])
       .scale(1200);
     const path = d3.geoPath().projection(projection);
 
-    // Clear previous render.
     svg.selectAll("*").remove();
 
     // Load US counties TopoJSON from the CDN.
@@ -74,12 +70,10 @@ const ChoroplethMap = ({ dataByYear }) => {
         const minValue = values.length > 0 ? d3.min(values) : 0;
         const maxValue = values.length > 0 ? d3.max(values) : 0;
 
-        // Create a linear color scale.
         const colorScale = d3.scaleLinear()
           .domain([minValue, maxValue])
           .range(["#FFF389", "#FE7B38"]);
 
-        // Draw each county.
         svg.selectAll("path")
           .data(counties)
           .enter()
@@ -90,8 +84,6 @@ const ChoroplethMap = ({ dataByYear }) => {
             // TODO: explore better strategies for this, probably need to just adjust this in python. There has to be a better way to do this lol.
             const convertedFips = convertFips(d.id);
             const value = currentData[convertedFips];
-
-            // console.log("Original:", d.id, "Converted:", convertedFips, "Value:", value);
             return value !== undefined ? colorScale(value) : "#ccc";
           })
           .attr("stroke", "#fff")
@@ -131,17 +123,21 @@ const ChoroplethMap = ({ dataByYear }) => {
 
   return (
     <div style={{ textAlign: "center", margin: "2rem auto" }}>
-      <h2>County-Level Skin Cancer Diagnosis (Choropleth)</h2>
+      <h1 className='landing-title'>A Growing Concern</h1>
+      <p className="landing-subtitle">Across the US, diagnosis rates continue to grow</p>
       <svg ref={svgRef}></svg>
-      <div style={{ marginTop: "1rem" }}>
-        <label htmlFor="year-select" style={{ marginRight: "0.5rem" }}>Select Year:</label>
-        <select id="year-select" value={year} onChange={handleYearChange}>
-          {availableYears.map((y) => (
-            <option key={y} value={y}>
-              {y}
-            </option>
-          ))}
-        </select>
+      <div style={{ marginTop: "1rem", display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <label htmlFor="year-range" style={{ marginRight: "0.5rem" }}>Select Year:</label>
+        <input
+          type="range"
+          id="year-range"
+          min={availableYears[0]}
+          max={availableYears[availableYears.length - 1]}
+          value={year}
+          onChange={handleYearChange}
+          step="1"
+        />
+        <span style={{ marginLeft: "0.5rem" }}>{year}</span>
       </div>
     </div>
   );
