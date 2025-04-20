@@ -1,0 +1,85 @@
+.scrolly-wrapper {
+  display: flex;
+  align-items: flex-start;
+  width: 100%;
+  margin: 4rem auto;
+  padding: 2rem;
+  box-sizing: border-box;
+}
+
+.scrolly-text {
+  flex: 0 0 40%; /* 40% width for text */
+  padding-right: 2rem;
+}
+
+.scrolly-image {
+  flex: 0 0 60%; /* 60% width for visualization */
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.scroll-step {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.3;
+  transition: opacity 0.3s;
+  font-size: 1.5rem;
+  padding: 2rem;
+}
+
+.scroll-step.active {
+  opacity: 1;
+}
+
+.people-visualization {
+  display: flex;
+  gap: 2rem;
+}
+
+.city-column {
+  text-align: center;
+  padding: 16px;
+  border-radius: 8px;
+  transition: transform 0.3s ease;
+}
+
+.city-column.active {
+  transform: scale(1.05);
+}
+
+.people-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 1rem;
+}
+
+.person-icon {
+  width: 48px;
+  height: 48px;
+  opacity: 0.3;
+  transition: opacity 0.3s ease, filter 0.3s ease;
+  filter: none; /* ensure default icons show original color */
+}
+
+.person-icon.highlighted {
+  opacity: 1;
+  /* make highlighted icons white */
+  filter: brightness(0) invert(1);
+}
+
+.person-icon.dimmed {
+  opacity: 0.3;
+  /* non-highlighted remain original color */
+  filter: none;
+}
+
+
+
+

@@ -1,143 +1,154 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import * as d3 from 'd3';
-import { feature } from 'topojson-client';
 
-const ChoroplethMap = ({ dataByYear }) => {
-  if (!dataByYear) {
-    throw new Error("dataByYear prop is undefined or null. Please verify that aggregatedData.json is correctly imported and passed.");
-  }
-
-  // extract available years (assumed to be continuous, e.g., 1991 to 2012) and sort them.
-  const availableYears = Object.keys(dataByYear).sort();
-  // use the first available year as the default.
-  const [year, setYear] = useState(availableYears[0]);
+const ChoroplethMap = () => {
+  const [geoData, setGeoData]           = useState(null);
+  const [cancerData, setCancerData]     = useState(null);
+  const [years, setYears]               = useState([]);
+  const [selectedYear, setSelectedYear] = useState(null);
   const svgRef = useRef();
-  const tooltipRef = useRef(null);
 
-  // Conversion function: Convert a 5-digit FIPS code (as a string) to a 6-digit key by repeating the second character.
-  // For example: "01001" becomes "011001", "04001" becomes "044001".
-  // TODO: explore better strategies for this, probably need to just consolidate this in python. There has to be a better way to do this lol
-  // maybe explore other sources that match the data?? would be much easier.
-  const convertFips = (fips) => {
-    if (typeof fips !== "string") fips = String(fips);
-    if (fips.length === 5) {
-      return fips.substring(0, 2) + fips[1] + fips.substring(2);
-    }
-    return fips;
-  };
-
-  // Create a persistent tooltip (once on mount).
+  // 1) Load GeoJSON & cancer data once
   useEffect(() => {
-    tooltipRef.current = d3.select("body")
-      .append("div")
-      .attr("class", "tooltip")
-      .style("position", "absolute")
-      .style("background", "#fff")
-      .style("padding", "5px 10px")
-      .style("border", "1px solid #ccc")
-      .style("border-radius", "4px")
-      .style("pointer-events", "none")
-      .style("opacity", 0)
-      .style("color", "#000")
-      .style("font-size", "12px");
-    return () => {
-      tooltipRef.current.remove();
-    };
+    Promise.all([
+      fetch('/data/msa.geojson').then(r => r.json()),
+      fetch('/data/skin_cancer_msa.json').then(r => r.json())
+    ])
+    .then(([geo, cancer]) => {
+      setGeoData(geo);
+      setCancerData(cancer);
+      const yrs = Array.from(new Set(cancer.map(d => d.year)))
+                        .sort((a, b) => a - b);
+      setYears(yrs);
+      setSelectedYear(yrs[0]);
+    })
+    .catch(err => console.error('Data load error:', err));
   }, []);
 
+  // 2) Create a tooltip DIV on the body
   useEffect(() => {
-    console.log("Rendering map for year:", year);
-    const svg = d3.select(svgRef.current);
-    const width = 960;
-    const height = 600;
-    svg.attr("width", width).attr("height", height);
-    // Define projection and path generator.
-    const projection = d3.geoAlbersUsa()
-      .translate([width / 2, height / 2])
-      .scale(1200);
-    const path = d3.geoPath().projection(projection);
+    const tooltip = d3.select('body')
+      .append('div')
+      .attr('class', 'msa-tooltip')
+      .style('position', 'absolute')
+      .style('pointer-events', 'none')
+      .style('padding', '6px')
+      .style('background', 'rgba(255,255,255,0.9)')
+      .style('border', '1px solid #ccc')
+      .style('border-radius', '4px')
+      .style('font-size', '12px')
+      .style('color', '#000')
+      .style('visibility', 'hidden')
+      .style('z-index', '1000');
 
-    svg.selectAll("*").remove();
+    return () => tooltip.remove();
+  }, []);
 
-    // Load US counties TopoJSON from the CDN.
-    // NOTE: this is where the different is in the FIPS codes. Another potential solution could be to explore other sources where the FIPS codes match?
-    d3.json("https://cdn.jsdelivr.net/npm/us-atlas@3/counties-10m.json")
-      .then(us => {
-        // Convert TopoJSON to GeoJSON for counties.
-        const counties = feature(us, us.objects.counties).features;
-        const currentData = dataByYear[year] || {};
-        const values = Object.values(currentData);
-        const minValue = values.length > 0 ? d3.min(values) : 0;
-        const maxValue = values.length > 0 ? d3.max(values) : 0;
+  // 3) Draw/update the map whenever data or year changes
+  useEffect(() => {
+    if (!geoData || !cancerData || selectedYear == null) return;
 
-        const colorScale = d3.scaleLinear()
-          .domain([minValue, maxValue])
-          .range(["#FFF389", "#FE7B38"]);
+    const svg = d3.select(svgRef.current)
+                  .attr('width', 960)
+                  .attr('height', 600);
+    svg.selectAll('*').remove();
 
-        svg.selectAll("path")
-          .data(counties)
-          .enter()
-          .append("path")
-          .attr("d", path)
-          .attr("fill", d => {
-            // converts d.id (5-digit FIPS) to your expected 6-digit key.
-            // TODO: explore better strategies for this, probably need to just adjust this in python. There has to be a better way to do this lol.
-            const convertedFips = convertFips(d.id);
-            const value = currentData[convertedFips];
-            return value !== undefined ? colorScale(value) : "#ccc";
-          })
-          .attr("stroke", "#fff")
-          .attr("stroke-width", 0.5)
-          .on("mouseover", function(event, d) {
-            d3.select(this)
-              .attr("stroke", "black")
-              .attr("stroke-width", 2);
-            const convertedFips = convertFips(d.id);
-            const value = currentData[convertedFips];
-            tooltipRef.current.transition().duration(200).style("opacity", 0.9);
-            tooltipRef.current.html(
-              `<strong>FIPS:</strong> ${convertedFips}<br/><strong>Value:</strong> ${value !== undefined ? value : "N/A"}`
-            )
-            .style("left", (event.pageX + 10) + "px")
-            .style("top", (event.pageY - 28) + "px");
-          })
-          .on("mousemove", function(event) {
-            tooltipRef.current.style("left", (event.pageX + 10) + "px")
-                            .style("top", (event.pageY - 28) + "px");
-          })
-          .on("mouseout", function() {
-            d3.select(this)
-              .attr("stroke", "#fff")
-              .attr("stroke-width", 0.5);
-            tooltipRef.current.transition().duration(500).style("opacity", 0);
-          });
-      })
-      .catch(error => {
-        console.error("Error loading county boundaries:", error);
-      });
-  }, [year, dataByYear]);
+    // projection & path
+    const projection = d3.geoAlbersUsa().fitSize([960, 600], geoData);
+    const path       = d3.geoPath(projection);
 
-  const handleYearChange = (e) => {
-    setYear(e.target.value);
-  };
+    // filter for this year
+    const yearData    = cancerData.filter(d => d.year === selectedYear);
+    // exclude the "Other" bucket (msa_code === 99999)
+    const realYearData = yearData.filter(d => d.msa_code !== 99999);
+
+    // map for lookup (including "Other" so tooltip still works if feature exists)
+    const recordByMsa = new Map(yearData.map(d => [d.msa_code, d]));
+
+    // compute domain based on real MSAs
+    const counts   = realYearData.map(d => d.count);
+    const positiveCounts = realYearData
+      .map(d => d.count)
+      .filter(c => c > 0);
+
+    const minPos = d3.min(positiveCounts) ?? 1;  // avoid log(0)
+    const maxCount = d3.max(positiveCounts) ?? 1;
+
+    const colorScale = d3.scaleLog()
+      .domain([minPos, maxCount])
+      .range(['#FFF389', '#FF7B37'])
+      .interpolate(d3.interpolateRgb)
+      .clamp(true);
+
+    const tooltip = d3.select('body .msa-tooltip');
+
+    svg.append('g')
+      .selectAll('path')
+      .data(geoData.features)
+      .join('path')
+        .attr('d', path)
+        .attr('fill', feat => {
+          const code = +feat.properties.geoid;
+          const val  = recordByMsa.get(code)?.count ?? 0;
+          // if zero or missing, show the lightest
+          return val > 0
+            ? colorScale(val)
+            : '#FFF389';
+        })
+        .attr('stroke', '#fff')
+        .attr('stroke-width', 0.5)
+        .on('mouseover', (event, feat) => {
+          const code   = +feat.properties.geoid;
+          const rec    = recordByMsa.get(code);
+          const name   = rec?.MSA || feat.properties.name;
+          const count  = rec?.count ?? 0;
+          tooltip
+            .html(`<strong>${name}</strong><br/>Count: ${count}`)
+            .style('visibility', 'visible');
+        })
+        .on('mousemove', (event) => {
+          tooltip
+            .style('top',  `${event.pageY + 10}px`)
+            .style('left', `${event.pageX + 10}px`);
+        })
+        .on('mouseout', () => {
+          tooltip.style('visibility', 'hidden');
+        });
+
+  }, [geoData, cancerData, selectedYear]);
+
+  // 4) Render slider centered instead of dropdown
+  if (!geoData || !cancerData) {
+    return <div>Loading map data…</div>;
+  }
 
   return (
-    <div style={{ textAlign: "center", margin: "2rem auto" }}>
-      <h1 className='landing-title'>A Growing Concern</h1>
-      <p className="landing-subtitle">Across the US, diagnosis rates continue to grow</p>
-      <svg ref={svgRef}></svg>
-      <div style={{ marginTop: "1rem", display: "flex", alignItems: "center", justifyContent: "center" }}>
-        <label htmlFor="year-range" style={{ marginRight: "0.5rem" }}>Select Year:</label>
+    <div>
+      <svg ref={svgRef} />
+
+      <div
+        style={{
+          marginTop: 12,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center'
+        }}
+      >
+        <label htmlFor="year-range" style={{ marginRight: 8 }}>
+          Year:
+        </label>
         <input
           type="range"
           id="year-range"
-          min={availableYears[0]}
-          max={availableYears[availableYears.length - 1]}
-          value={year}
-          onChange={handleYearChange}
-          step="1"
+          min={years[0]}
+          max={years[years.length - 1]}
+          step={1}
+          value={selectedYear}
+          onChange={e => setSelectedYear(+e.target.value)}
         />
-        <span style={{ marginLeft: "0.5rem" }}>{year}</span>
+        <span style={{ marginLeft: 12, fontWeight: 'bold' }}>
+          {selectedYear}
+        </span>
       </div>
     </div>
   );
