@@ -9,6 +9,7 @@ import ScrollPeopleVisualization from './components/ScrollPeopleVisualization';
 
 import './App.css';
 import 'mapbox-gl/dist/mapbox-gl.css';
+import DualChoroplethMap from './components/DualChoroplethMap';
 
 
 function App() {
@@ -54,6 +55,10 @@ function App() {
       { /*<div className="map-section">
         <OzoneGlobe /> 
       </div> */ }
+
+      <div className="app-container">
+        <DualChoroplethMap />
+      </div>
 
       <div className="app-container">
         <ScrollPeopleVisualization />
