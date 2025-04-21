@@ -6,83 +6,92 @@ import img3 from "../assets/skincancerscrolly3.svg";
 import "./TypesScroll.css";
 
 const stepsData = [
-    {
-      id: 0,
-      text: "Section 1: Introduction to skin cancer – what it is, basic risk factors, and why awareness is important.",
-      image: img1,
-    },
-    {
-      id: 1,
-      text: "Section 2: Dive deeper into causes, environmental risks, and preventive measures.",
-      image: img2,
-    },
-    {
-      id: 2,
-      text: "Section 3: Explore treatment options and early detection techniques with a call to action.",
-      image: img3,
-    },
-  ];
-  
-  const TypesScroll = () => {
-    const [activeIndex, setActiveIndex] = useState(0);
-    // imageSrc = current image
-    const [imageSrc, setImageSrc] = useState(stepsData[0].image);
-    // opacity controls fade
-    const [opacity, setOpacity] = useState(1);
-    const scroller = useRef(null);
-    const containerRef = useRef(null);
-  
-    useEffect(() => {
-      scroller.current = scrollama();
-      scroller.current
-        .setup({
-          step: ".scrolly-step",
-          offset: 0.5, // triggers at 50%
-          debug: false,
-        })
-        .onStepEnter((response) => {
-          setActiveIndex(response.index);
-        });
-      window.addEventListener("resize", scroller.current.resize);
-      return () => {
-        scroller.current.destroy();
-        window.removeEventListener("resize", scroller.current.resize);
-      };
-    }, []);
-  
-    // when the active text section changes, perform a fade transition on the image.
-    useEffect(() => {
-      // fade out the current image.
-      setOpacity(0);
-      // after the ade-out duration, update the image and fade it in.
-      const timeoutId = setTimeout(() => {
-        setImageSrc(stepsData[activeIndex].image);
-        setOpacity(1);
-      }, 500); // adjust the timeout (ms) to match the CSS transition duration.
-      return () => clearTimeout(timeoutId);
-    }, [activeIndex]);
-  
-    return (
-      <div className="scrolly-wrapper" ref={containerRef}>
-        <div className="scrolly-text">
-          {stepsData.map((step, index) => (
-            <div
-              key={step.id}
-              className={`scrolly-step ${index === activeIndex ? "active" : ""}`}
-            >
-              <p>{step.text}</p>
+  {
+    id: 0,
+    category: "TYPES OF SKIN CANCER",
+    title: "Basal Cell Carcinoma",
+    description:
+      "This is a placeholder description for basal cell carcinoma. Replace with your own text describing what it is, how common, etc.",
+    image: img1,
+  },
+  {
+    id: 1,
+    category: "TYPES OF SKIN CANCER",
+    title: "Squamous Cell Carcinoma",
+    description:
+      "A type of skin cancer that develops from squamous cells, which are flat, scale‑like cells that line the skin and other body surfaces.",
+    image: img2,
+  },
+  {
+    id: 2,
+    category: "TYPES OF SKIN CANCER",
+    title: "Melanoma",
+    description:
+      "This is a placeholder description for melanoma. Replace with your own text about why it’s more dangerous, risk factors, etc.",
+    image: img3,
+  },
+];
+
+const TypesScroll = () => {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [imageSrc, setImageSrc] = useState(stepsData[0].image);
+  const [opacity, setOpacity] = useState(1);
+  const scroller = useRef(null);
+
+  useEffect(() => {
+    scroller.current = scrollama();
+    scroller.current
+      .setup({
+        step: ".scrolly-step",
+        offset: 0.5,
+        debug: false,
+      })
+      .onStepEnter(({ index }) => {
+        setActiveIndex(index);
+      });
+
+    window.addEventListener("resize", scroller.current.resize);
+    return () => {
+      scroller.current.destroy();
+      window.removeEventListener("resize", scroller.current.resize);
+    };
+  }, []);
+
+  useEffect(() => {
+    setOpacity(0);
+    const t = setTimeout(() => {
+      setImageSrc(stepsData[activeIndex].image);
+      setOpacity(1);
+    }, 500);
+    return () => clearTimeout(t);
+  }, [activeIndex]);
+
+  return (
+    <div className="scrolly-wrapper">
+      <div className="scrolly-text">
+        {stepsData.map((step, i) => (
+          <div
+            key={step.id}
+            className={`scrolly-step ${i === activeIndex ? "active" : ""}`}
+          >
+            <div className="step-content">
+              <h3>{step.category}</h3>
+              <h2>{step.title}</h2>
+              <p>{step.description}</p>
             </div>
-          ))}
-        </div>
-        <div className="scrolly-image">
-          <img
-            src={imageSrc}
-            alt={`Illustration for section ${activeIndex + 1}`}
-            style={{ transition: "opacity 0.5s ease-in-out", opacity: opacity }}
-          />
-        </div>
+          </div>
+        ))}
       </div>
-    );
-  };
-  
-  export default TypesScroll;
+
+      <div className="scrolly-image">
+        <img
+          src={imageSrc}
+          alt={`Illustration for ${stepsData[activeIndex].title}`}
+          style={{ opacity, transition: "opacity 0.5s ease-in-out" }}
+        />
+      </div>
+    </div>
+  );
+};
+
+export default TypesScroll;

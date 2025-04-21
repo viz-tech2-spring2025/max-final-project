@@ -67,5 +67,76 @@ html, body {
   background: #0B1A2E;
 }
 
+.key-factors {
+  text-align: center;
+  color: #fff;
+  padding: 4rem 1rem;
+}
+
+.key-factors-title {
+  font-size: 2.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.key-factors-text {
+  font-size: 1.125rem;
+  line-height: 1.6;
+  max-width: 800px;
+  margin: 0.75rem auto;
+  opacity: 0.9;
+}
+
+.static-globe-wrapper {
+  background: #0B1A2E;
+  padding: 2rem 0;
+  text-align: center;
+}
+
+.static-globe-container {
+  width: 300px;
+  height: 300px;
+  margin: 0 auto;
+  /* border: 1px solid rgba(255,255,255,0.1); */
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+}
+
+.app-container.static-globe-section {
+  display: flex;
+  width: 100%;
+  margin: 4rem auto;
+  padding: 2rem;
+  box-sizing: border-box;
+  background: #0B1A2E;
+}
+
+.static-globe-text {
+  flex: 1;
+  padding: 2rem;
+  color: #fff;
+  text-align: left;
+}
+
+.static-globe-container {
+  flex: 1;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.static-globe-box {
+  width: 300px;
+  height: 300px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+
+
+
+
+
 
 

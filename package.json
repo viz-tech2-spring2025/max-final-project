@@ -11,6 +11,8 @@
   },
   "dependencies": {
     "@deck.gl/core": "^9.1.8",
+    "@deck.gl/experimental-layers": "^6.4.10",
+    "@deck.gl/geo-layers": "^9.1.11",
     "@deck.gl/layers": "^9.1.8",
     "@deck.gl/mapbox": "^9.1.8",
     "@deck.gl/react": "^9.1.8",
@@ -21,7 +23,7 @@
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-globe.gl": "^2.33.2",
-    "react-map-gl": "^8.0.3",
+    "react-map-gl": "^8.0.4",
     "react-scrollama": "^2.4.0",
     "react-transition-group": "^4.4.5",
     "scrollama": "^3.2.0",

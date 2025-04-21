@@ -17,8 +17,7 @@ const ChoroplethMap = () => {
     .then(([geo, cancer]) => {
       setGeoData(geo);
       setCancerData(cancer);
-      const yrs = Array.from(new Set(cancer.map(d => d.year)))
-                        .sort((a, b) => a - b);
+      const yrs = Array.from(new Set(cancer.map(d => d.year))).sort((a, b) => a - b);
       setYears(yrs);
       setSelectedYear(yrs[0]);
     })
@@ -58,21 +57,14 @@ const ChoroplethMap = () => {
     const path       = d3.geoPath(projection);
 
     // filter for this year
-    const yearData    = cancerData.filter(d => d.year === selectedYear);
-    // exclude the "Other" bucket (msa_code === 99999)
+    const yearData     = cancerData.filter(d => d.year === selectedYear);
     const realYearData = yearData.filter(d => d.msa_code !== 99999);
-
-    // map for lookup (including "Other" so tooltip still works if feature exists)
-    const recordByMsa = new Map(yearData.map(d => [d.msa_code, d]));
+    const recordByMsa  = new Map(yearData.map(d => [d.msa_code, d]));
 
     // compute domain based on real MSAs
-    const counts   = realYearData.map(d => d.count);
-    const positiveCounts = realYearData
-      .map(d => d.count)
-      .filter(c => c > 0);
-
-    const minPos = d3.min(positiveCounts) ?? 1;  // avoid log(0)
-    const maxCount = d3.max(positiveCounts) ?? 1;
+    const positiveCounts = realYearData.map(d => d.count).filter(c => c > 0);
+    const minPos  = d3.min(positiveCounts) ?? 1;
+    const maxCount= d3.max(positiveCounts) ?? 1;
 
     const colorScale = d3.scaleLog()
       .domain([minPos, maxCount])
@@ -90,7 +82,6 @@ const ChoroplethMap = () => {
         .attr('fill', feat => {
           const code = +feat.properties.geoid;
           const val  = recordByMsa.get(code)?.count ?? 0;
-          // if zero or missing, show the lightest
           return val > 0
             ? colorScale(val)
             : '#FFF389';
@@ -98,10 +89,10 @@ const ChoroplethMap = () => {
         .attr('stroke', '#fff')
         .attr('stroke-width', 0.5)
         .on('mouseover', (event, feat) => {
-          const code   = +feat.properties.geoid;
-          const rec    = recordByMsa.get(code);
-          const name   = rec?.MSA || feat.properties.name;
-          const count  = rec?.count ?? 0;
+          const code  = +feat.properties.geoid;
+          const rec   = recordByMsa.get(code);
+          const name  = rec?.MSA || feat.properties.name;
+          const count = rec?.count ?? 0;
           tooltip
             .html(`<strong>${name}</strong><br/>Count: ${count}`)
             .style('visibility', 'visible');
@@ -123,12 +114,44 @@ const ChoroplethMap = () => {
   }
 
   return (
-    <div>
+    <div style={{ maxWidth: 960, margin: '0 auto', color: '#fff' }}>
+      {/* Title & subtitle */}
+      <div style={{ textAlign: 'center', marginBottom: 16 }}>
+        <h1 style={{ margin: 0, fontSize: '2rem' }}>A Growing Concern</h1>
+        <p style={{ margin: '4px 0 16px', opacity: 0.8 }}>
+          Across the US, diagnosis rates continue to grow.
+        </p>
+      </div>
+
+      {/* Legend */}
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginBottom: 40,
+        fontSize: '0.9rem',
+        color: '#ccc'
+      }}>
+        <span>Low end</span>
+        <div
+          style={{
+            width: 200,
+            height: 15,
+            margin: '0 8px',
+            background: 'linear-gradient(to right, #FFF389, #FF7B37)',
+            borderRadius: 5
+          }}
+        />
+        <span>High end</span>
+      </div>
+
+      {/* Map */}
       <svg ref={svgRef} />
 
+      {/* Slider */}
       <div
         style={{
-          marginTop: 12,
+          marginTop: 16,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center'

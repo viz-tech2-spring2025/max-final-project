@@ -1,46 +1,75 @@
-
 .scrolly-wrapper {
-    display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-    width: 100%;
-    margin: 4rem auto;
-    padding: 2rem;
-    box-sizing: border-box;
-  }
-  
-  .scrolly-text {
-    flex: 1;
-    padding-right: 2rem;
-  }
+  display: flex;
+  width: 100%;
+  margin: 4rem auto;
+  padding: 2rem;
+  box-sizing: border-box;
+}
 
-  .scrolly-step {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0.3;
-    transition: opacity 0.3s;
-    font-size: 1.5rem;
-    padding: 2rem;
-  }
+/* Text column */
+.scrolly-text {
+  flex: 1;
+  padding-right: 2rem;
+}
 
-  .scrolly-step.active {
-    opacity: 1;
-  }
- 
-  .scrolly-image {
-    flex: 1;
-    position: sticky;
-    top: 0;
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  .scrolly-image img {
-    max-width: 90%;
-    max-height: 90%;
-  }
-  
+.scrolly-step {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  opacity: 0.3;
+  transition: opacity 0.3s;
+  padding: 2rem;
+}
+
+.scrolly-step.active {
+  opacity: 1;
+}
+
+/* New content wrapper for hierarchy */
+.step-content h3 {
+  margin: 0;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  opacity: 0.8;
+}
+
+.step-content h2 {
+  margin: 0.5rem 0;
+  font-size: 2rem;
+  line-height: 1.2;
+}
+
+.step-content p {
+  margin-top: 1rem;
+  font-size: 1rem;
+  line-height: 1.6;
+  max-width: 40rem;
+}
+
+/* Image column */
+.scrolly-image {
+  flex: 1;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.scrolly-image img {
+  max-width: 90%;
+  max-height: 90%;
+}
+
+/* 1) Pack the step content to the left */
+.scrolly-step {
+  justify-content: flex-start;
+}
+
+/* 2) Make sure text is left‑aligned */
+.step-content {
+  width: 100%;
+  text-align: left;
+}
