@@ -7,7 +7,7 @@ const OzoneGlobe = () => {
 
   useEffect(() => {
     // Fetch your GeoJSON file; adjust the URL if necessary
-    fetch("src/data/ozone_data.geojson")
+    fetch("/data/ozone_data.geojson")
       .then(response => response.json())
       .then(data => {
         // Ensure data is a FeatureCollection
