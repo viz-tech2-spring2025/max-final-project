@@ -1,5 +1,6 @@
 .intro-wrapper {
   display: flex;
+  flex-wrap: wrap;       /* ← allow items to stack instead of overflowing */
   align-items: center;
   max-width: 1000px;
   margin: 2rem auto 3rem;
@@ -15,14 +16,15 @@
 }
 
 .intro-image {
-  flex: 0 0 100%;
+  flex: 0 0 60%;         /* ← was 100%, now 60% */
   display: flex;
   justify-content: center;
 }
 
 .intro-image img {
-  max-width: 300px;
+  max-width: 100%;
   height: auto;
+  display: block;
 }
 
 /* Scrolly layout */

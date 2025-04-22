@@ -1,3 +1,10 @@
+* {
+  outline: 1px solid rgba(255, 0, 0, 0.2);
+}
+
+html { box-sizing: border-box; }
+*, *::before, *::after { box-sizing: inherit; }
+
 #root {
   max-width: 1280px;
   margin: 0 auto;
@@ -45,23 +52,20 @@ h1 {
 }
 
 .app-container {
-  max-width: 2000px;
+  width: 100%;
+  max-width: 1280px;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 2rem;
+  box-sizing: border-box;
+  text-align: center;
+  background: #0B1A2E;
 }
+
 html, body {
   margin: 0;
   padding: 0;
   width: 100%;
   background-color: #0B1A2E;
-}
-
-.app-container {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
-  background: #0B1A2E;
 }
 
 .map-section {
@@ -71,9 +75,11 @@ html, body {
 }
 
 .key-factors {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 4rem 1rem;
   text-align: center;
   color: #fff;
-  padding: 4rem 1rem;
 }
 
 .key-factors-title {
@@ -136,6 +142,8 @@ html, body {
   border-radius: 8px;
   overflow: hidden;
 }
+
+
 
 
 

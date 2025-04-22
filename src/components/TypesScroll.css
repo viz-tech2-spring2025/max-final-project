@@ -66,10 +66,15 @@
 /* 1) Pack the step content to the left */
 .scrolly-step {
   justify-content: flex-start;
+  
 }
 
 /* 2) Make sure text is left‑aligned */
 .step-content {
   width: 100%;
   text-align: left;
+}
+.scrolly-text,
+.scrolly-image {
+  min-width: 0;
 }
