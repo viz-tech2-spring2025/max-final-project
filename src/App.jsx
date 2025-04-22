@@ -55,12 +55,10 @@ function App() {
       </div>
 
       <div className="app-container key-factors">
-        <h2 className="key-factors-title">What are the key factors?</h2>
+        <h1>What are the key factors?</h1>
         <p className="key-factors-text">
-          Skin cancer is primarily an exposure problem. Environmentally speaking, the ozone protects us from the full force of the sun’s UV rays.
-        </p>
-        <p className="key-factors-text">
-          The real problem lies in human behaviour.
+          People point to a variety of factors when it comes to skin cancer, but it really boils down to an exposure problem.
+          There are 3 primary factors we will explore: <b><br/><br/>The ozone layer <br/> How rising temperatures might effect us<br/> How we behave in the sun</b> 
         </p>
       </div>
 
@@ -69,9 +67,10 @@ function App() {
       </div>
       
       <div className="app-container">
+      <h1>The Ozone Layer</h1>
         <div className="app-container static-globe-section">
+         
           <div className="static-globe-text">
-          <h2>The Ozone Layer</h2>
           <p>Since the Moteral Protocol in 1987, the ozone layer has experienced considerable levels of repair. The ozone layer is what primarily protects
             us from harmful levels of raditation, but as you can see on the map below, the underlying problem is not with the ozone layer, it suggests
             something deeper. </p>
@@ -85,6 +84,10 @@ function App() {
       </div>
 
       <div className="app-container">
+        <h1>Human Behaviour</h1>
+        <p>With rising temperatures potentially encouraging more time spent outdoors, we are at higher risk than ever of getting skin cancer.<br/>
+        <br/><h2>Could the primary problem lie in how we behave in the sun?</h2><br/> <b>The data suggest this just might be the case.</b>
+        </p>
         <ScrollPeopleVisualization />
       </div>
 

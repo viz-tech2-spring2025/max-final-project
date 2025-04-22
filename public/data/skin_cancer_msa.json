@@ -6428,15 +6428,6 @@
   {
     "Cancer Sites": "Melanoma of the Skin",
     "Cancer Sites Code": 25010.0,
-    "year": 2006,
-    "Year Code": 2006.0,
-    "MSA": "Other",
-    "msa_code": 99999,
-    "count": 22913
-  },
-  {
-    "Cancer Sites": "Melanoma of the Skin",
-    "Cancer Sites Code": 25010.0,
     "year": 2007,
     "Year Code": 2007.0,
     "MSA": "Akron, OH",

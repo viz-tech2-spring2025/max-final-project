@@ -1,8 +1,11 @@
-
 #root {
   max-width: 1280px;
   margin: 0 auto;
   text-align: center;
+}
+
+h1 {
+  font-size: 80px;
 }
 
 .logo {
@@ -109,6 +112,7 @@ html, body {
   padding: 2rem;
   box-sizing: border-box;
   background: #0B1A2E;
+  align-items: center;
 }
 
 .static-globe-text {
@@ -132,6 +136,8 @@ html, body {
   border-radius: 8px;
   overflow: hidden;
 }
+
+
 
 
 

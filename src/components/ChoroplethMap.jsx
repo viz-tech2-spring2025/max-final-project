@@ -8,7 +8,6 @@ const ChoroplethMap = () => {
   const [selectedYear, setSelectedYear] = useState(null);
   const svgRef = useRef();
 
-  // 1) Load GeoJSON & cancer data once
   useEffect(() => {
     Promise.all([
       fetch('/data/msa.geojson').then(r => r.json()),
@@ -24,7 +23,6 @@ const ChoroplethMap = () => {
     .catch(err => console.error('Data load error:', err));
   }, []);
 
-  // 2) Create a tooltip DIV on the body
   useEffect(() => {
     const tooltip = d3.select('body')
       .append('div')
@@ -43,7 +41,6 @@ const ChoroplethMap = () => {
     return () => tooltip.remove();
   }, []);
 
-  // 3) Draw/update the map whenever data or year changes
   useEffect(() => {
     if (!geoData || !cancerData || selectedYear == null) return;
 
@@ -108,7 +105,6 @@ const ChoroplethMap = () => {
 
   }, [geoData, cancerData, selectedYear]);
 
-  // 4) Render slider centered instead of dropdown
   if (!geoData || !cancerData) {
     return <div>Loading map data…</div>;
   }

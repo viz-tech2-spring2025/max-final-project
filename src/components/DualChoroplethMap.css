@@ -1,0 +1,56 @@
+.dual-choropleth-wrapper {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    margin: 2rem 0;
+  }
+  
+  .map-column {
+    flex: 1;
+    text-align: center;
+    color: #fff;
+  }
+  
+  .map-column h2 {
+    margin-bottom: 0.5rem;
+  }
+  
+  /* each map gets its own legend */
+  .map-legend {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+    color: #ccc;
+  }
+  
+  .legend-gradient-bar {
+    width: 200px;
+    height: 15px;
+    margin: 0 8px;
+    border-radius: 5px;
+  }
+  
+  .legend-label {
+    white-space: nowrap;
+  }
+  
+  .map-column svg {
+    display: block;
+    margin: 0 auto;
+  }
+  
+  /* tooltip */
+  .map-tooltip {
+    pointer-events: none;
+    position: absolute;
+    padding: 6px;
+    background: rgba(255,255,255,0.9);
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 12px;
+    color: #000;
+    visibility: hidden;
+  }
+  

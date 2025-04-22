@@ -1,4 +1,3 @@
-// src/components/OzoneGlobeDeck.jsx
 import React, { useState, useEffect, useRef } from "react";
 import DeckGL from "@deck.gl/react";
 import { _GlobeView as GlobeView } from "@deck.gl/core";
@@ -42,7 +41,7 @@ export default function OzoneGlobeDeck() {
       // distance from top of wrapper to top of viewport
       const rectTop    = containerRef.current.getBoundingClientRect().top;
       const vh         = window.innerHeight;
-      const scrollRange = vh * 2;            // 2×vh to go from t=0→1
+      const scrollRange = vh * 2;
 
       // t = 0 when wrapper top sits at bottom of viewport (rectTop = vh)
       // t = 1 when wrapper top has scrolled past -vh
