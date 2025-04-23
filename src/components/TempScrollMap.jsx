@@ -1,5 +1,3 @@
-// src/components/ScrollytellingAnomalies.jsx
-
 import "mapbox-gl/dist/mapbox-gl.css";
 import "./TempScrollMap.css";
 
@@ -8,7 +6,6 @@ import mapboxgl from "mapbox-gl";
 import * as THREE from "three";
 import { useInView } from "react-intersection-observer";
 
-// Your Mapbox public token
 mapboxgl.accessToken = "pk.eyJ1Ijoic3BlbmNtYSIsImEiOiJjbTg2a2Z5eHEwNTV4Mmtwd2U3NG1qb2V1In0.8HyzOR5scmIu7aN1fis6Yg";
 
 // camera/scene presets
@@ -177,8 +174,7 @@ const ScrollytellingAnomalies = () => {
   return (
     <div className="scrollytelling-container">
       <div ref={textRef} className="text-column">
-  
-        {/* Bay Area now starts 50vh down the page */}
+
         <section ref={rSF} className="text-section bay-area-start">
           <h1>Bay Area View</h1>
           <p>The west coast experiences a what appears like a relatively small difference from normal in March. However, even a small change in global average temperature can lead to more frequent and intense heat waves, droughts, and floods, as well as changes in precipitation patterns.</p>

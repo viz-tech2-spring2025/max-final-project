@@ -1,4 +1,3 @@
-// src/components/SkinCancerInfo.jsx
 import React from 'react';
 import './SkinCancerInfo.css';
 import infoSVG from '../assets/what is skin cancer landing ilustration.svg'; // adjust the path if necessary

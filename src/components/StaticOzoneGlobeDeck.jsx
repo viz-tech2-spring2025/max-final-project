@@ -1,4 +1,3 @@
-// src/components/StaticOzoneGlobeDeck.jsx
 import React, { useState, useEffect } from "react";
 import DeckGL from "@deck.gl/react";
 import { _GlobeView as GlobeView } from "@deck.gl/core";

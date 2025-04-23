@@ -1,4 +1,3 @@
-// App.js
 import React, { useState, useEffect } from 'react';
 
 import LandingSection   from './components/LandingSection';
