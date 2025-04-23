@@ -14,6 +14,7 @@ import DualChoroplethMap from './components/DualChoroplethMap';
 import OzoneGlobeDeck from './components/OzoneGlobeDeck';
 import StaticOzoneGlobeDeck from './components/StaticOzoneGlobeDeck';
 import FooterSection from './components/FooterSection';
+import ScrollytellingAnomalies from './components/TempScrollMap';
 
 
 function App() {
@@ -100,10 +101,25 @@ function App() {
         <DualChoroplethMap />
       </div>
 
+      <div className="app-container">
+        <div className="app-container anomaly">
+        <h1>County Temperature Anomalies</h1>
+        <p className="anomaly-intro">
+          As global temperatures rise, experts suggest that perhaps people are spending more time otuside than ever.
+          This map shows the anomalies of counties (difference from expected average temperature) in March of this year.
+          This allows us to understand as temperaures increase, the conidtions for outdoor acitivities cover a larger portion of the year.
+        </p>
+        <h3 className="anomaly-subtitle">
+          Scroll down to explore anomalies in the Bay Area, Denver, and Hawaiʻi.
+        </h3>
+      </div>
+        <ScrollytellingAnomalies />
+      </div>
+        
       <div className="app-container human-behaviour">
         <h1>Human Behaviour</h1>
         <p className="human-behaviour-intro">
-          With rising temperatures potentially encouraging more time spent outdoors, we are at higher risk than ever of getting skin cancer.
+          So, with rising temperatures potentially encouraging more time spent outdoors, we are at higher risk than ever of getting skin cancer.
         </p>
         <h3 className="human-behaviour-subtitle">
           Could the primary problem lie in how we behave in the sun?

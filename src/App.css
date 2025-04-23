@@ -196,3 +196,45 @@ h1 {
   margin-bottom: 8rem;   /* increased from 2rem */
   opacity: 0.9;
 }
+
+.full-bleed-map {
+  flex: 1 !important;
+}
+
+.app-container.full-bleed .map-column {
+  position: relative;    /* take it out of the normal flow */
+  width: 100vw;          /* span the entire viewport */
+  left: 50%;             /* position its left edge at the center of its parent */
+  transform: translateX(-50%); /* pull it back half the viewport to align flush left */
+  overflow: visible;     /* ensure nothing is clipped */
+}
+.bay-area-start {
+  padding-top: 75vh;
+}
+
+/* Section wrapper */
+.anomaly {
+  padding: 3rem 1rem;
+  text-align: center;
+}
+
+/* Main heading */
+.anomaly-title {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  letter-spacing: 1px;
+}
+
+/* Intro paragraph */
+.anomaly-intro {
+  font-size: 1.125rem;
+  line-height: 1.6;
+  margin-bottom: rem;
+  color: #e0e0e0;
+}
+
+/* Optional subtitle */
+.anomaly-subtitle {
+  font-size: 1.5rem;
+  margin: 1.5rem 0 1rem;
+}
