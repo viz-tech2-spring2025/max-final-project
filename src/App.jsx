@@ -39,8 +39,12 @@ function App() {
   return (
     <div className="site-wrapper">
       <LandingSection />
-
       <div className="app-container">
+      <h1>1 in 5 Americans will develop skin cancer in their lifetime.</h1>
+      {/* CHANGE THIS AFTER PRESENTATION */}
+      <br></br>
+      <br></br>
+      <br></br>
         {loading ? (
           <div>Loading map data…</div>
         ) : (
