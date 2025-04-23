@@ -32,3 +32,7 @@ body {
   padding: 2rem;
   text-align: center;
 }
+
+html, body {
+  font-family: 'Overpass', sans-serif;
+}

@@ -115,7 +115,7 @@ const ChoroplethMap = () => {
       <div style={{ textAlign: 'center', marginBottom: 16 }}>
         <h1 style={{ margin: 0, fontSize: '2rem' }}>A Growing Concern</h1>
         <p style={{ margin: '4px 0 16px', opacity: 0.8 }}>
-          Across the US, diagnosis rates continue to grow.
+          Across the US, diagnosis rates continue to grow. With advancements in technology and awareness, why is this the case?
         </p>
       </div>
 

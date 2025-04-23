@@ -1,8 +1,16 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./LandingSection.css";
 import sunSVG from "../assets/sun.svg"; 
 
 const LandingSection = () => {
+  const [animateSun, setAnimateSun] = useState(false);
+
+  useEffect(() => {
+    // Trigger glow after the rise animation finishes
+    const timer = setTimeout(() => setAnimateSun(true), 3000);
+    return () => clearTimeout(timer);
+  }, []);
+
   const handleScroll = () => {
     window.scrollTo({
       top: window.innerHeight,
@@ -14,7 +22,11 @@ const LandingSection = () => {
     <section className="landing-section">
       <div className="content-wrapper">
         <div className="sun-container">
-          <img src={sunSVG} alt="Rising sun" className="sun" />
+          <img
+            src={sunSVG}
+            alt="Rising sun"
+            className={`sun${animateSun ? " animate" : ""}`}
+          />
         </div>
         <h1 className="landing-title">The Invisible Epidemic</h1>
         <p className="landing-subtitle">

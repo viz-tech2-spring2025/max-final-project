@@ -48,21 +48,43 @@ html, body {
 }
 
 .key-factors {
-  width: 100%;
-  box-sizing: border-box;
-  padding: 4rem 1rem;
+  padding: 3rem 1rem;
+}
+
+/* --- heading hierarchy --- */
+.key-factors-title {
+  font-size: 2.5rem;   /* was 2rem, now matches your original */
+  margin-bottom: 1.5rem;
+  letter-spacing: 1px;
+}
+
+/* --- wrapper for text + list --- */
+.key-factors-content {
+  max-width: 600px;
+  margin: 0 auto;
   text-align: center;
 }
-.key-factors-title {
-  font-size: 2.5rem;
-  margin-bottom: 1.5rem;
-}
-.key-factors-text {
+
+/* --- paragraph styling --- */
+.key-factors-intro {
   font-size: 1.125rem;
   line-height: 1.6;
-  max-width: 800px;
-  margin: 0.75rem auto;
-  opacity: 0.9;
+  margin-bottom: 1.5rem;
+  color: #e0e0e0;                /* slightly softer white */
+}
+
+/* --- bullet list styling --- */
+.key-factors-list {
+  list-style: none;    /* no bullets */
+  margin: 0;
+  padding: 0;
+}
+
+.key-factors-list li {
+  font-size: 2rem;    /* increased from 1.125rem */
+  line-height: 1.6;      /* adjust if you like */
+  margin-bottom: 0.75rem;
+  
 }
 
 .static-globe-wrapper {
@@ -144,4 +166,33 @@ h1 {
 }
 .read-the-docs {
   color: #888;
+}
+
+.human-behaviour {
+  padding: 3rem 1rem;
+}
+
+.human-behaviour-title {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  letter-spacing: 1px;
+}
+
+.human-behaviour-intro {
+  font-size: 1.125rem;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+  color: #e0e0e0;
+}
+
+.human-behaviour-subtitle {
+  font-size: 1.5rem;
+  margin: 1.5rem 0 1rem;
+}
+
+.human-behaviour-note {
+  font-size: 1.125rem;
+  line-height: 1.6;
+  margin-bottom: 8rem;   /* increased from 2rem */
+  opacity: 0.9;
 }

@@ -1,0 +1,84 @@
+.footer-section {
+  width: 100%;
+  background: #0B1A2E;        /* static background */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 4rem 1rem 2rem;
+  position: relative;
+  overflow: hidden;
+  /* no background transition any more */
+}
+
+.footer-sun-container {
+  width: 200px;
+  height: 200px;
+  margin-bottom: 1.5rem;
+  position: relative;
+  overflow: visible;
+}
+
+.footer-sun-container::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(
+    circle,
+    rgba(255, 200, 50, 0.4) 0%,
+    rgba(255, 200, 50, 0) 70%
+  );
+  filter: blur(20px);
+  opacity: 0;
+  transition: opacity 2s ease-out;
+}
+
+/* reveal the halo when the footer is in view */
+.footer-section.animate .footer-sun-container::before {
+  opacity: 1;
+}
+
+/* remove any default filter on the footer sun */
+.footer-sun {
+  width: 100%;
+  height: auto;
+  display: block;
+  filter: none;                /* ⚡ no default drop-shadow */
+  transition:
+    filter 2s ease-out,
+    transform 2s ease-out,
+    opacity 2s ease-out;
+}
+
+/* glow + subtle set motion when .animate is added */
+.footer-sun.animate {
+  filter: drop-shadow(0 0 30px rgba(255, 200, 50, 0.8));
+  transform: translateY(30px);
+  opacity: 0.85;
+}
+
+/* rest of your footer CSS… */
+
+
+.footer-content-wrapper {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.footer-title {
+  font-size: 2.5rem;
+  color: #fff;
+  margin-bottom: 1rem;
+}
+
+.footer-text {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: #fff;
+  margin-bottom: 1rem;
+  opacity: 0.9;
+}

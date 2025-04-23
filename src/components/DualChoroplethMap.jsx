@@ -205,7 +205,7 @@ export default function DualChoroplethMap() {
   return (
     <div className="dual-choropleth-wrapper">
       <div className="map-column">
-        <h2>Skin Cancer Diagnosis Rates ({cancerYear})</h2>
+        <h2>Skin Cancer Diagnosis Rates</h2>
         <Legend scale={cancerScale} domain={cancerDomain} />
         <svg ref={svgRefMSA} width={480} height={600} />
       </div>

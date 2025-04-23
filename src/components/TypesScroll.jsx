@@ -11,7 +11,7 @@ const stepsData = [
     category: "TYPES OF SKIN CANCER",
     title: "Basal Cell Carcinoma",
     description:
-      "This is a placeholder description for basal cell carcinoma. Replace with your own text describing what it is, how common, etc.",
+      "Basal Cell Carcinoma (BCC) is the most common form of skin cancer, arising from the basal cells located at the bottom of the epidermis—the outermost layer of the skin. It typically manifests on skin areas frequently exposed to the sun, such as the face, neck, ears, shoulders, and scalp.",
     image: img1,
   },
   {
@@ -19,7 +19,7 @@ const stepsData = [
     category: "TYPES OF SKIN CANCER",
     title: "Squamous Cell Carcinoma",
     description:
-      "A type of skin cancer that develops from squamous cells, which are flat, scale‑like cells that line the skin and other body surfaces.",
+      "Squamous Cell Carcinoma (SCC) is the second most common type of skin cancer, originating from the squamous cells, which form the upper layers of the epidermis. It typically appears on sun-exposed areas such as the face, ears, lips, scalp, neck, arms, and hands.",
     image: img2,
   },
   {
@@ -27,7 +27,7 @@ const stepsData = [
     category: "TYPES OF SKIN CANCER",
     title: "Melanoma",
     description:
-      "This is a placeholder description for melanoma. Replace with your own text about why it’s more dangerous, risk factors, etc.",
+      "Melanoma is the most serious and aggressive form of skin cancer, originating in melanocytes—the cells responsible for producing melanin, the pigment that gives skin its color. Though less common than basal cell carcinoma or squamous cell carcinoma, melanoma has a much higher risk of spreading to other parts of the body (metastasizing), making early detection and treatment essential.",
     image: img3,
   },
 ];
