@@ -13,7 +13,7 @@ const SF       = { name: "San Francisco", coords: [-122.4194, 37.7749], zoom: 10
 const DENVER   = { name: "Denver",         coords: [-104.9903, 39.7392], zoom: 10, pitch: 60, bearing: -17.6 };
 const HONOLULU = { name: "Honolulu",       coords: [-157.8583, 21.3069], zoom: 10, pitch: 60, bearing: -17.6 };
 
-// STATEFP → postal abbr map
+// STATEFP -> postal abbr map
 const stateAbbr = {
   "01":"AL","02":"AK","04":"AZ","05":"AR","06":"CA","08":"CO","09":"CT","10":"DE","11":"DC",
   "12":"FL","13":"GA","15":"HI","16":"ID","17":"IL","18":"IN","19":"IA","20":"KS","21":"KY",
@@ -29,7 +29,7 @@ const ScrollytellingAnomalies = () => {
   const currentRef      = useRef(SF.name);
   const textRef         = useRef();
 
-  // Intersection Observer options: trigger when top of element crosses vertical center
+  // intersection Observer options: trigger when top of element crosses vertical center
   const inViewOptions = {
     rootMargin: "-50% 0px 0px 0px",
     threshold:  0
@@ -38,12 +38,12 @@ const ScrollytellingAnomalies = () => {
   const [rDEN,  inDEN]  = useInView(inViewOptions);
   const [rHON,  inHON]  = useInView(inViewOptions);
 
-  // Reset scroll on mount
+  // reset scroll on mount
   useEffect(() => {
     if (textRef.current) textRef.current.scrollTop = 0;
   }, []);
 
-  // Initialize Mapbox + layers + tooltip
+  // initialize Mapbox + layers + tooltip
   useEffect(() => {
     if (!mapContainerRef.current) return;
     const map = new mapboxgl.Map({
@@ -61,7 +61,7 @@ const ScrollytellingAnomalies = () => {
     map.on("style.load", () => {
       map.resize();
 
-      // Optional Three.js layer
+      // Three.js layer
       const threeLayer = {
         id: "three-layer",
         type: "custom",
@@ -85,14 +85,14 @@ const ScrollytellingAnomalies = () => {
       };
       map.addLayer(threeLayer, "waterway-label");
 
-      // Fetch counties + anomalies
+      // fetch counties + anomalies
       Promise.all([
         fetch("/data/counties.geojson").then(r => r.json()),
         fetch("/data/anomalies.json").then(r => r.json())
       ]).then(([countiesGeo, anomaliesJson]) => {
         const anomalies = anomaliesJson.data;
 
-        // Join anomaly to feature.properties.value
+        // join anomaly to feature.properties.value
         const features = countiesGeo.features.map(f => {
           const sfp  = f.properties.STATEFP;
           const cfp  = f.properties.COUNTYFP;
@@ -102,12 +102,12 @@ const ScrollytellingAnomalies = () => {
           return f;
         });
 
-        // Compute global min/max
+        // compute global min/max
         const values = features.map(f => f.properties.value);
         const minVal = Math.min(...values);
         const maxVal = Math.max(...values);
 
-        // Add source + extrusion layer
+        // add source + extrusion layer
         map.addSource("anomaly-counties", {
           type: "geojson",
           data: { type: "FeatureCollection", features }
@@ -128,7 +128,7 @@ const ScrollytellingAnomalies = () => {
           }
         });
 
-        // Tooltip interactions
+        // tooltip interactions
         map.on("mouseenter", "anomaly-extrusions", () => {
           map.getCanvas().style.cursor = "pointer";
         });

@@ -6,7 +6,7 @@ import { TileLayer } from "@deck.gl/geo-layers";
 
 const MAPBOX_TOKEN = "pk.eyJ1Ijoic3BlbmNtYSIsImEiOiJjbTg2a2Z5eHEwNTV4Mmtwd2U3NG1qb2V1In0.8HyzOR5scmIu7aN1fis6Yg";
 
-// fixed “camera” centered on Antarctica
+// fixed “camera” centered on antarctica
 const ANTARCTICA_VIEW = {
   latitude: -65,
   longitude: 0,
@@ -15,10 +15,11 @@ const ANTARCTICA_VIEW = {
   bearing: 0
 };
 
-export default function StaticOzoneGlobeDeck() {
+export default function staticOzoneGlobeDeck() {
+  // state to hold our ozone measurement points
   const [markers, setMarkers] = useState([]);
 
-  // load the same geojson points
+  // load the geojson and pull out only the point features
   useEffect(() => {
     fetch("/data/ozone_data.geojson")
       .then((r) => r.json())
@@ -28,21 +29,23 @@ export default function StaticOzoneGlobeDeck() {
             .filter((f) => f.geometry.type === "Point")
             .map((f) => ({
               position: f.geometry.coordinates,
-              value: f.properties.value
+              value:    f.properties.value
             }))
         )
       )
-      .catch(console.error);
+      .catch(console.error); // log any fetch errors
   }, []);
 
+  // helper to turn ozone value into a rgba color
   const getColor = (d) => {
     const x = Math.min(1, Math.max(0, d.value / 350));
-    const r = Math.round(255 * x),
-      b = 255 - r;
+    const r = Math.round(255 * x), b = 255 - r;
     return [r, 50, b, 200];
   };
+  // helper to pick a radius (in meters) based on ozone value
   const getRadius = (d) => 20000 + (d.value / 350) * 50000;
 
+  // build deck.gl layers: base map tiles + scatter points
   const layers = [
     new TileLayer({
       id: "static-mapbox-tiles",
@@ -54,41 +57,42 @@ export default function StaticOzoneGlobeDeck() {
           tile: {
             bbox: { west, south, east, north }
           },
-          data,
-          id
+          data, id
         } = props;
+        // draw each tile as a bitmap
         return new BitmapLayer(props, {
-          id: `${id}-bitmap`,
-          data: null,
-          image: data,
+          id:     `${id}-bitmap`,
+          data:   null,
+          image:  data,
           bounds: [west, south, east, north]
         });
       }
     }),
     new ScatterplotLayer({
-      id: "static-ozone-points",
-      data: markers,
-      pickable: true,
-      opacity: 0.8,
-      getPosition: (d) => d.position,
-      getFillColor: getColor,
-      getRadius,
-      radiusUnits: "meters"
+      id:           "static-ozone-points",
+      data:         markers,       // our ozone points
+      pickable:     true,
+      opacity:      0.8,
+      getPosition:  (d) => d.position,
+      getFillColor: getColor,      // color by ozone value
+      getRadius:    getRadius,     // size by ozone value
+      radiusUnits:  "meters"
     })
   ];
 
+  // render a fixed-size globe centered on antarctica
   return (
-        <div className="static-globe-container">
-          {/* inner fixed-size box */}
-          <div className="static-globe-box">
-            <DeckGL
-              views={[new GlobeView()]}
-              viewState={ANTARCTICA_VIEW}
-              controller={false}
-              layers={layers}
-              style={{ width: "100%", height: "100%" }}
-            />
-          </div>
-        </div>
-      );
+    <div className="static-globe-container">
+      {/* box to control globe dimensions and centering */}
+      <div className="static-globe-box">
+        <DeckGL
+          views={[new GlobeView()]}
+          viewState={ANTARCTICA_VIEW}
+          controller={false}
+          layers={layers}
+          style={{ width: "100%", height: "100%" }}
+        />
+      </div>
+    </div>
+  );
 }

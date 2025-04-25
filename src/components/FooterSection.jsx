@@ -3,9 +3,11 @@ import "./FooterSection.css";
 import sunSVG from "../assets/sun.svg";
 
 const FooterSection = () => {
+  // state to know when to kick off the sun animation
   const [animateSun, setAnimateSun] = useState(false);
   const footerRef = useRef(null);
 
+  // watch for the footer entering the viewport, then trigger animation once
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry], obs) => {
@@ -22,26 +24,26 @@ const FooterSection = () => {
 
   return (
     <section
-      className={`footer-section${animateSun ? " animate" : ""}`}
       ref={footerRef}
+      className={`footer-section${animateSun ? " animate" : ""}`}
     >
+      {/* sun graphic that slides down or fades in when visible */}
       <div className="footer-sun-container">
         <img
           src={sunSVG}
-          alt="Setting sun"
+          alt="setting sun"
           className={`footer-sun${animateSun ? " animate" : ""}`}
         />
       </div>
+
+      {/* wrap the closing thoughts */}
       <div className="footer-content-wrapper">
-        <h2 className="footer-title">What now?</h2>
+        <h2 className="footer-title">what now?</h2>
         <p className="footer-text">
-          Skin cancer causes and co-relations are largely things out of our
-          individual control.
+          skin cancer causes and co-relations are largely things out of our individual control.
         </p>
         <p className="footer-text">
-          However, our behaviour is something that we can control, and by
-          taking appropriate and responsible measures, we can minimize our
-          exposure and risk of skin cancer.
+          however, our behavior is something we can manage, and by taking responsible measures we can minimize our exposure and risk.
         </p>
       </div>
     </section>

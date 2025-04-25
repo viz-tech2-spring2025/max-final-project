@@ -11,6 +11,7 @@ const LandingSection = () => {
     return () => clearTimeout(timer);
   }, []);
 
+    // Scroll down on arrow click (see below)
   const handleScroll = () => {
     window.scrollTo({
       top: window.innerHeight,

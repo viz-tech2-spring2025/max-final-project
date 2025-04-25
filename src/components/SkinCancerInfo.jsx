@@ -1,8 +1,9 @@
 import React from 'react';
 import './SkinCancerInfo.css';
-import infoSVG from '../assets/what is skin cancer landing ilustration.svg'; // adjust the path if necessary
+import infoSVG from '../assets/what is skin cancer landing ilustration.svg';
 
 const SkinCancerInfo = () => {
+  // returns an image with skin cancer illusrtation next to it
   return (
     <section className="info-section">
       <div className="content-wrapper">

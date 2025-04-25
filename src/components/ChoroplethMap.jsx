@@ -2,12 +2,14 @@ import React, { useState, useRef, useEffect } from 'react';
 import * as d3 from 'd3';
 
 const ChoroplethMap = () => {
+  // state for our geo boundaries, cancer counts, list of years, and current year
   const [geoData, setGeoData]           = useState(null);
   const [cancerData, setCancerData]     = useState(null);
   const [years, setYears]               = useState([]);
   const [selectedYear, setSelectedYear] = useState(null);
   const svgRef = useRef();
 
+  // when the component mounts: grab the map shapes and the cancer data
   useEffect(() => {
     Promise.all([
       fetch('/data/msa.geojson').then(r => r.json()),
@@ -16,15 +18,17 @@ const ChoroplethMap = () => {
     .then(([geo, cancer]) => {
       setGeoData(geo);
       setCancerData(cancer);
+      // pull out the unique years so our slider can use them
       const yrs = Array.from(new Set(cancer.map(d => d.year))).sort((a, b) => a - b);
       setYears(yrs);
-      setSelectedYear(yrs[0]);
+      setSelectedYear(yrs[0]); // start at the first year
     })
-    .catch(err => console.error('Data load error:', err));
+    .catch(err => console.error('Oops, data load error:', err));
   }, []);
 
+  // stick one tooltip div onto the page
   useEffect(() => {
-    const tooltip = d3.select('body')
+    const tip = d3.select('body')
       .append('div')
       .attr('class', 'msa-tooltip')
       .style('position', 'absolute')
@@ -38,39 +42,42 @@ const ChoroplethMap = () => {
       .style('visibility', 'hidden')
       .style('z-index', '1000');
 
-    return () => tooltip.remove();
+    return () => tip.remove();
   }, []);
 
+  // every time our data or selected year changes, redraw the map
   useEffect(() => {
     if (!geoData || !cancerData || selectedYear == null) return;
 
     const svg = d3.select(svgRef.current)
                   .attr('width', 960)
                   .attr('height', 600);
-    svg.selectAll('*').remove();
+    svg.selectAll('*').remove(); // clear out last render
 
-    // projection & path
+    // set up the Albers USA projection
     const projection = d3.geoAlbersUsa().fitSize([960, 600], geoData);
     const path       = d3.geoPath(projection);
 
-    // filter for this year
-    const yearData     = cancerData.filter(d => d.year === selectedYear);
-    const realYearData = yearData.filter(d => d.msa_code !== 99999);
-    const recordByMsa  = new Map(yearData.map(d => [d.msa_code, d]));
+    // narrow our cancer data to just this year
+    const thisYear    = cancerData.filter(d => d.year === selectedYear);
+    const validData   = thisYear.filter(d => d.msa_code !== 99999);
+    const byMsa       = new Map(thisYear.map(d => [d.msa_code, d]));
 
-    // compute domain based on real MSAs
-    const positiveCounts = realYearData.map(d => d.count).filter(c => c > 0);
-    const minPos  = d3.min(positiveCounts) ?? 1;
-    const maxCount= d3.max(positiveCounts) ?? 1;
+    // find a nice range for our color scale
+    const counts      = validData.map(d => d.count).filter(c => c > 0);
+    const minCount    = d3.min(counts) ?? 1;
+    const maxCount    = d3.max(counts) ?? 1;
 
+    // log scale from pale yellow up to orange
     const colorScale = d3.scaleLog()
-      .domain([minPos, maxCount])
+      .domain([minCount, maxCount])
       .range(['#FFF389', '#FF7B37'])
       .interpolate(d3.interpolateRgb)
       .clamp(true);
 
     const tooltip = d3.select('body .msa-tooltip');
 
+    // draw each shape, color it, and hook up hover behavior
     svg.append('g')
       .selectAll('path')
       .data(geoData.features)
@@ -78,16 +85,14 @@ const ChoroplethMap = () => {
         .attr('d', path)
         .attr('fill', feat => {
           const code = +feat.properties.geoid;
-          const val  = recordByMsa.get(code)?.count ?? 0;
-          return val > 0
-            ? colorScale(val)
-            : '#FFF389';
+          const val  = byMsa.get(code)?.count ?? 0;
+          return val > 0 ? colorScale(val) : '#FFF389';
         })
         .attr('stroke', '#fff')
         .attr('stroke-width', 0.5)
         .on('mouseover', (event, feat) => {
           const code  = +feat.properties.geoid;
-          const rec   = recordByMsa.get(code);
+          const rec   = byMsa.get(code);
           const name  = rec?.MSA || feat.properties.name;
           const count = rec?.count ?? 0;
           tooltip
@@ -105,29 +110,31 @@ const ChoroplethMap = () => {
 
   }, [geoData, cancerData, selectedYear]);
 
+  // show a loading message until both files are in
   if (!geoData || !cancerData) {
     return <div>Loading map data…</div>;
   }
 
+  // main render: title, legend bar, the SVG, and a year slider
   return (
     <div style={{ maxWidth: 960, margin: '0 auto', color: '#fff' }}>
-      {/* Title & subtitle */}
       <div style={{ textAlign: 'center', marginBottom: 16 }}>
         <h1 style={{ margin: 0, fontSize: '2rem' }}>A Growing Concern</h1>
         <p style={{ margin: '4px 0 16px', opacity: 0.8 }}>
-          Across the US, diagnosis rates continue to grow. With advancements in technology and awareness, why is this the case?
+          Skin cancer diagnoses are climbing. With new tech and awareness, what’s keeping the trend upward?
         </p>
       </div>
 
-      {/* Legend */}
-      <div style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginBottom: 40,
-        fontSize: '0.9rem',
-        color: '#ccc'
-      }}>
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          marginBottom: 40,
+          fontSize: '0.9rem',
+          color: '#ccc'
+        }}
+      >
         <span>Low end</span>
         <div
           style={{
@@ -141,10 +148,8 @@ const ChoroplethMap = () => {
         <span>High end</span>
       </div>
 
-      {/* Map */}
       <svg ref={svgRef} />
 
-      {/* Slider */}
       <div
         style={{
           marginTop: 16,

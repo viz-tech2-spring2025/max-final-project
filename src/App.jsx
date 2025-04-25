@@ -4,7 +4,6 @@ import LandingSection   from './components/LandingSection';
 import ChoroplethMap    from './components/ChoroplethMap';
 import SkinCancerInfo   from './components/SkinCancerInfo';
 import TypesScroll      from './components/TypesScroll';
-import OzoneGlobe       from './components/OzoneGlobe';
 import ScrollPeopleVisualization from './components/ScrollPeopleVisualization';
 
 import './App.css';
@@ -37,29 +36,26 @@ function App() {
   }, []);
 
   return (
+    {/* Landing section + text */},
     <div className="site-wrapper">
       <LandingSection />
       <div className="app-container">
       <h1>1 in 5 Americans will develop skin cancer in their lifetime.</h1>
-      {/* CHANGE THIS AFTER PRESENTATION */}
-      <br></br>
-      <br></br>
-      <br></br>
         {loading ? (
           <div>Loading map data…</div>
         ) : (
           <ChoroplethMap dataByYear={dataByYear} />
         )}
       </div>
-
+      {/* Cancer information section */},  
       <div className="app-container">
         <SkinCancerInfo />
       </div>
-
+      {/* Scrolly information section */}
       <div className="app-container">
         <TypesScroll />
       </div>
-
+      {/* Key factors section*/}
       <div className="app-container key-factors">
         <h2 className="key-factors-title">What are the key factors?</h2>
         <div className="key-factors-content">
@@ -74,11 +70,11 @@ function App() {
           </ul>
         </div>
       </div>
-
+      {/* Large ozone globe */}
       <div className="map-section">
         <OzoneGlobeDeck />
       </div>
-      
+      {/* Ozone globe information section*/}
       <div className="app-container">
         <h1>The Ozone Layer</h1>
         <div className="app-container static-globe-section">
@@ -99,11 +95,11 @@ function App() {
          This begs the question: if the environmental changes the world is ungoing isn't primarily responsible, what is?
        </p>
      </div>
-
+      {/* Small multiples uv vs skin cancer diagnosis maps */}
       <div className="app-container">
         <DualChoroplethMap />
       </div>
-
+      {/* Anomaly mapbox scrollytelling */}
       <div className="app-container">
         <div className="app-container anomaly">
         <h1>County Temperature Anomalies</h1>
@@ -118,7 +114,7 @@ function App() {
       </div>
         <ScrollytellingAnomalies />
       </div>
-        
+      {/* Survey data mapping */}
       <div className="app-container human-behaviour">
         <h1>Human Behaviour</h1>
         <p className="human-behaviour-intro">
@@ -132,7 +128,7 @@ function App() {
         </p>
         <ScrollPeopleVisualization />
       </div>
-
+      {/* Footer */}
       <div className="app-container">
         <FooterSection />
       </div>

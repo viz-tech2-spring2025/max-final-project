@@ -6,24 +6,27 @@ import { TileLayer } from "@deck.gl/geo-layers";
 
 const MAPBOX_TOKEN = "pk.eyJ1Ijoic3BlbmNtYSIsImEiOiJjbTg2a2Z5eHEwNTV4Mmtwd2U3NG1qb2V1In0.8HyzOR5scmIu7aN1fis6Yg";
 
-// start fully zoomed out
+// where we start our view (fully zoomed out)
 const DEFAULT_VIEW     = { latitude: 0,  longitude: 0, zoom: 0,   pitch: 0, bearing: 0 };
-// end zoomed in on Antarctica
+// where we end up (zoomed in on antarctica)
 const ANTARCTICA_VIEW  = { latitude: -75, longitude: 0, zoom: 2.5, pitch: 0, bearing: 0 };
 
-export default function OzoneGlobeDeck() {
-  const [markers, setMarkers]   = useState([]);
-  const [viewState, setViewState] = useState(DEFAULT_VIEW);
-  const containerRef            = useRef();
+export default function ozoneGlobeDeck() {
+  // state to hold our ozone points
+  const [markers, setMarkers]       = useState([]);
+  // state for the globe's current view (lat/lon/zoom/etc)
+  const [viewState, setViewState]   = useState(DEFAULT_VIEW);
+  // ref to the outer div so we can track scroll position
+  const containerRef                = useRef();
 
-  // load points
+  // load the geojson of ozone points once on mount
   useEffect(() => {
     fetch("/data/ozone_data.geojson")
       .then(r => r.json())
       .then(data =>
         setMarkers(
           data.features
-            .filter(f => f.geometry.type === "Point")
+            .filter(f => f.geometry.type === "Point") // only keep point features
             .map(f => ({
               position: f.geometry.coordinates,
               value:    f.properties.value
@@ -33,21 +36,21 @@ export default function OzoneGlobeDeck() {
       .catch(console.error);
   }, []);
 
-  // scroll‐driven interpolation over 2× viewport height
+  // listen for window scroll and tween between views based on scroll position
   useEffect(() => {
     const onScroll = () => {
       if (!containerRef.current) return;
 
-      // distance from top of wrapper to top of viewport
+      // how far from top of wrapper to top of viewport?
       const rectTop    = containerRef.current.getBoundingClientRect().top;
       const vh         = window.innerHeight;
-      const scrollRange = vh * 2;
+      const scrollRange = vh * 2; // we interpolate over two viewports tall
 
-      // t = 0 when wrapper top sits at bottom of viewport (rectTop = vh)
-      // t = 1 when wrapper top has scrolled past -vh
+      // compute t between 0 and 1
       let t = (vh - rectTop) / scrollRange;
       t = Math.min(1, Math.max(0, t));
 
+      // simple linear interpolation helper
       const lerp = (a, b) => a + t * (b - a);
       setViewState({
         latitude:  lerp(DEFAULT_VIEW.latitude,  ANTARCTICA_VIEW.latitude),
@@ -62,15 +65,16 @@ export default function OzoneGlobeDeck() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // color & radius helpers
-  const getColor  = d => {
+  // helper to turn ozone value into a color ([r, g, b, a])
+  const getColor = d => {
     const x = Math.min(1, Math.max(0, d.value / 350));
     const r = Math.round(255 * x), b = 255 - r;
     return [r, 50, b, 200];
   };
+  // helper to pick a radius in meters based on ozone value
   const getRadius = d => 20000 + (d.value / 350) * 50000;
 
-  // layers: TileLayer + ScatterplotLayer
+  // build our deck.gl layers: base tiles + scatter points
   const layers = [
     new TileLayer({
       id:       "mapbox-tiles",
@@ -91,23 +95,24 @@ export default function OzoneGlobeDeck() {
       }
     }),
     new ScatterplotLayer({
-      id:            "ozone-points",
-      data:          markers,
-      pickable:      true,
-      opacity:       0.8,
-      getPosition:   d => d.position,
-      getFillColor:  getColor,
-      getRadius,
-      radiusUnits:   "meters"
+      id:           "ozone-points",
+      data:         markers,
+      pickable:     true,
+      opacity:      0.8,
+      getPosition:  d => d.position,
+      getFillColor: getColor,
+      getRadius:    getRadius,
+      radiusUnits:  "meters"
     })
   ];
 
+  // the render: a really tall div so scrolling changes the globe view
   return (
     <div
       ref={containerRef}
       style={{
         width:    "100%",
-        height:   "300vh",
+        height:   "300vh",    // make it tall enough to scroll
         position: "relative"
       }}
     >
